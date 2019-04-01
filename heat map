@@ -1,0 +1,30 @@
+#!/bin/bash --login
+# reduce the walltime as more cores are requested
+#PBS -l walltime=01:00:00
+# to request more cores change ncpus
+#PBS -l select=1:ncpus=8
+#PBS -N convert_tsv_to_biom
+#PBS -A d411-training
+#PBS -j oe
+
+### script start
+
+echo "setting temporary directory"
+mkdir -p ~/qiime_tmp
+export TMPDIR=~/qiime_tmp
+
+echo "loading virtual environment"
+conda deactivate
+conda activate qiime1
+
+echo "creating and cd to output directory"
+mkdir -p ~/output/bioc0023/
+cd ~/output/bioc0023/
+
+# QIIME code
+make_otu_heatmap.py -i otu_table_L2_1%.biom -o heatmap1%.pdf
+
+echo "closing environment"
+conda deactivate
+
+### end script
